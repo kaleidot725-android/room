@@ -1,10 +1,11 @@
-package jp.kaleidot725.sample
+package jp.kaleidot725.sample.room.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import jp.kaleidot725.sample.room.data.User
 
 @Dao
 interface UserDao {

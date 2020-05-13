@@ -4,35 +4,51 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.room.Room
+import androidx.room.RoomDatabase
+import jp.kaleidot725.sample.room.AppDatabase
+import jp.kaleidot725.sample.room.data.Repo
+import jp.kaleidot725.sample.room.data.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Date
 
 class MainActivity : AppCompatActivity() {
+    private val database : AppDatabase by lazy {
+        Room.databaseBuilder(applicationContext, AppDatabase::class.java, "database-name"
+        ).fallbackToDestructiveMigration().build()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         CoroutineScope(Dispatchers.IO).launch {
-            test()
+            testForUserDao()
+            testForRepoDao()
         }
     }
 
-    private fun test() {
-        val database = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "database-name"
-        ).fallbackToDestructiveMigration().build()
-
+    private fun testForUserDao() {
         val userDao = database.userDao()
+
         val newUser = User(0, Date().time.toString(), Date().time.toString())
         userDao.insert(newUser)
         Log.v("TAG", "after insert ${userDao.getAll()}")
 
-        userDao.deleteAll()
-        Log.v("TAG", "after deleteAll ${userDao.getAll()}")
+        val delUser  = userDao.getAll().last()
+        userDao.delete(delUser)
+        Log.v("TAG", "after delete ${userDao.getAll()}")
+    }
+
+    private fun testForRepoDao() {
+        val repoDao = database.repoDao()
+
+        val newRepo = Repo(0, Date().time.toString())
+        repoDao.insert(newRepo)
+        Log.v("TAG", "after insert ${repoDao.getAll()}")
+
+        repoDao.delete(newRepo)
+        Log.v("TAG", "after delete ${repoDao.getAll()}")
     }
 }

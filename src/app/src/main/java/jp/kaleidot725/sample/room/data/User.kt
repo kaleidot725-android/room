@@ -1,4 +1,4 @@
-package jp.kaleidot725.sample
+package jp.kaleidot725.sample.room.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
