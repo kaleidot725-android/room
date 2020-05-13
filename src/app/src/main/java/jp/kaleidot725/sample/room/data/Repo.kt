@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "repos")
 data class Repo(
     @PrimaryKey val userId: Int,
-    @ColumnInfo(name = "name") val name: String?
+    val name: String?
 )

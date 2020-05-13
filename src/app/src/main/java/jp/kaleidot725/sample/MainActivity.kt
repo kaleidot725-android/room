@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             testForUserDao()
             testForRepoDao()
+            testForUserRepo()
         }
     }
 
@@ -36,8 +37,7 @@ class MainActivity : AppCompatActivity() {
         userDao.insert(newUser)
         Log.v("TAG", "after insert ${userDao.getAll()}")
 
-        val delUser  = userDao.getAll().last()
-        userDao.delete(delUser)
+        userDao.delete(newUser)
         Log.v("TAG", "after delete ${userDao.getAll()}")
     }
 
@@ -50,5 +50,29 @@ class MainActivity : AppCompatActivity() {
 
         repoDao.delete(newRepo)
         Log.v("TAG", "after delete ${repoDao.getAll()}")
+    }
+
+    private fun testForUserRepo() {
+        val userDao = database.userDao()
+        val repoDao = database.repoDao()
+        val userRepoDao = database.userRepoDao()
+
+        val newUser = User(0, Date().time.toString(), Date().time.toString())
+        userDao.insert(newUser)
+        Log.v("TAG", "after insert ${userDao.getAll()}")
+
+        val newRepo = Repo(newUser.id, Date().time.toString())
+        repoDao.insert(newRepo)
+        Log.v("TAG", "after insert ${repoDao.getAll()}")
+
+        Log.v("TAG", "get view ${userRepoDao.getAll()}")
+
+        userDao.delete(newUser)
+        Log.v("TAG", "after delete ${userDao.getAll()}")
+
+        repoDao.delete(newRepo)
+        Log.v("TAG", "after delete ${repoDao.getAll()}")
+
+        Log.v("TAG", "get view ${userRepoDao.getAll()}")
     }
 }
